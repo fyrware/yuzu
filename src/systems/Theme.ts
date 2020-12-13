@@ -1,22 +1,7 @@
 import { Context } from 'cortex'
 
 export class Theme<Value extends Theme.Context = Theme.Context> extends Context<Value> {
-    public value = {
-        font: {
-            family: 'Arial, sans-serif',
-            size: 16
-        },
-        gradients: [
-            new Theme.Gradient(0, [
-                [ new Theme.Color(Theme.Color.HEX, 0x000000), 0 ],
-                [ new Theme.Color(Theme.Color.HEX, 0xFFFFFF), 1 ],
-            ])
-        ],
-        palette: [
-            new Theme.Color(Theme.Color.HEX, 0x000000),
-            new Theme.Color(Theme.Color.HEX, 0xFFFFFF)
-        ]
-    } as Value
+    public value = Theme.Default as Value
 }
 
 export namespace Theme {
@@ -40,7 +25,7 @@ export namespace Theme {
         public toString(): string {
             switch (this.format) {
                 case Color.Format.HEX:
-                    return `#${ this.values[ 0 ].toString(16) }${ Math.round(this.opacity * 255).toString(16) }`
+                    return `#${ this.values.map(n => n.toString(16)).join('') }${ Math.round(this.opacity * 255).toString(16) }`
                 case Color.Format.HSL:
                     return `hsla(${ this.values.join(', ') }, ${ this.opacity })`
                 case Color.Format.RGB:
@@ -62,9 +47,15 @@ export namespace Theme {
         export const RGB = Format.RGB
     }
 
-    export interface Font {
-        family: string
-        size: number
+    export class Font {
+
+        public constructor(family: string, size: number, serif: boolean = false) {
+
+        }
+
+        public toString(): string {
+            return ``
+        }
     }
 
     export class Gradient {
@@ -89,8 +80,24 @@ export namespace Theme {
     }
 
     export interface Context {
-        font: Font
+        fonts: Font[]
         gradients: Gradient[]
         palette: Color[]
     }
+
+    export const Default: Context = {
+        fonts: [
+            new Theme.Font('Arial', 1)
+        ],
+        gradients: [
+            new Theme.Gradient(0, [
+                [ new Theme.Color(Theme.Color.HEX, 0x000000), 0 ],
+                [ new Theme.Color(Theme.Color.HEX, 0xFFFFFF), 1 ],
+            ])
+        ],
+        palette: [
+            new Theme.Color(Theme.Color.HEX, 0x000000),
+            new Theme.Color(Theme.Color.HEX, 0xFFFFFF)
+        ]
+    } 
 }
