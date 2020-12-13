@@ -1,0 +1,26 @@
+{
+  "name": "yuzu",
+  "version": "1.0.0",
+  "description": "Web Application Framework",
+  "main": "pkg/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fyrware/yuzu.git"
+  },
+  "author": "Nick Dugger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fyrware/yuzu/issues"
+  },
+  "homepage": "https://github.com/fyrware/yuzu#readme",
+  "dependencies": {
+    "cortex": "github:ndugger/cortex"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.3"
+  }
+}

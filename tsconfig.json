@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "declaration": true,
+        "esModuleInterop": true,
+        "inlineSourceMap": true,
+        "inlineSources": true,
+        "lib": [
+            "dom",
+            "esnext"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "outDir": "pkg",
+        "strictNullChecks": true,
+        "target": "esnext"
+    }
+}
