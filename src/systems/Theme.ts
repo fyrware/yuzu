@@ -1,3 +1,4 @@
+import color from 'color'
 import { Context } from 'cortex'
 
 export class Theme<Value extends Theme.Context = Theme.Context> extends Context<Value> {
@@ -20,6 +21,22 @@ export namespace Theme {
 
         public alpha(percent: number): Color {
             return Object.assign(new Color(this.format, ...this.values), { opacity: percent / 100 })
+        }
+
+        public darken(amount: number): Color {
+            return new Color(this.format, ...color(this.toString()).darken(amount).array())
+        }
+
+        public lighten(amount: number): Color {
+            return new Color(this.format, ...color(this.toString()).lighten(amount).array())
+        }
+
+        public negate(): Color {
+            return new Color(this.format, ...color(this.toString()).negate().array())
+        }
+
+        public rotate(amount): Color {
+            return new Color(this.format, ...color(this.toString()).rotate(amount).array())
         }
 
         public toString(): string {
@@ -49,12 +66,22 @@ export namespace Theme {
 
     export class Font {
 
-        public constructor(family: string, size: number, serif: boolean = false) {
+        private family: string
+        private size: number
+        private serif: boolean
 
+        public constructor(family: string, size: number = 1, serif: boolean = false) {
+            this.family = family
+            this.size = size
+            this.serif = serif
+        }
+
+        public resize(size: number): Font {
+            return new Font(this.family, size, this.serif)
         }
 
         public toString(): string {
-            return ``
+            return `${ this.size }rem ${ this.family }, ${ this.serif ? 'serif' : 'sans-serif' }`
         }
     }
 
@@ -67,25 +94,30 @@ export namespace Theme {
             this.angle = angle
             this.steps = steps
         }
+
+        public toString(): string {
+            return `linear-gradient(${ this.angle }deg, ${ this.steps.map(([ color, stop ]) => `${ color } ${ stop * 100 }%`) })`
+        }
     }
 
     export namespace Gradient {
         export type Step = [ Color, number ]
     }
 
-    export enum Size {
-        Small,
-        Medium,
-        Large,
-    }
+    export class Shadow {}
 
     export interface Context {
+        colors: Color[]
         fonts: Font[]
         gradients: Gradient[]
-        palette: Color[]
+        shadows: Shadow[]
     }
 
     export const Default: Context = {
+        colors: [
+            new Theme.Color(Theme.Color.HEX, 0x000000),
+            new Theme.Color(Theme.Color.HEX, 0xFFFFFF)
+        ],
         fonts: [
             new Theme.Font('Arial', 1)
         ],
@@ -95,9 +127,6 @@ export namespace Theme {
                 [ new Theme.Color(Theme.Color.HEX, 0xFFFFFF), 1 ],
             ])
         ],
-        palette: [
-            new Theme.Color(Theme.Color.HEX, 0x000000),
-            new Theme.Color(Theme.Color.HEX, 0xFFFFFF)
-        ]
+        shadows: []
     } 
 }

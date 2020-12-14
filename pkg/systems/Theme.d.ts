@@ -1,28 +1,6 @@
 import { Context } from 'cortex';
-export declare class Theme extends Context<Theme.Context> {
-    value: {
-        action: {
-            critical: Theme.Color;
-            discover: Theme.Color;
-            failure: Theme.Color;
-            success: Theme.Color;
-            warning: Theme.Color;
-        };
-        common: {
-            black: Theme.Color;
-            white: Theme.Color;
-        };
-        font: {
-            family: string;
-            size: number;
-        };
-        palette: {
-            primary: Theme.Color;
-            secondary: Theme.Color;
-            tertiary: Theme.Color;
-            quaternary: Theme.Color;
-        };
-    };
+export declare class Theme<Value extends Theme.Context = Theme.Context> extends Context<Value> {
+    value: Value;
 }
 export declare namespace Theme {
     class Color {
@@ -31,6 +9,10 @@ export declare namespace Theme {
         private values;
         constructor(format: Color.Format, ...values: number[]);
         alpha(percent: number): Color;
+        darken(amount: number): Color;
+        lighten(amount: number): Color;
+        negate(): Color;
+        rotate(amount: any): Color;
         toString(): string;
     }
     namespace Color {
@@ -43,38 +25,30 @@ export declare namespace Theme {
         const HSL = Format.HSL;
         const RGB = Format.RGB;
     }
+    class Font {
+        private family;
+        private size;
+        private serif;
+        constructor(family: string, size?: number, serif?: boolean);
+        resize(size: number): Font;
+        toString(): string;
+    }
+    class Gradient {
+        private angle;
+        private steps;
+        constructor(angle: number, steps: Gradient.Step[]);
+        toString(): string;
+    }
+    namespace Gradient {
+        type Step = [Color, number];
+    }
+    class Shadow {
+    }
     interface Context {
-        action: {
-            critical: Color;
-            discover: Color;
-            success: Color;
-            warning: Color;
-        };
-        common: {
-            black: Color;
-            white: Color;
-        };
-        font: Font;
-        palette: {
-            primary: Color;
-            secondary: Color;
-            tertiary: Color;
-            quaternary: Color;
-        };
+        colors: Color[];
+        fonts: Font[];
+        gradients: Gradient[];
+        shadows: Shadow[];
     }
-    interface Font {
-        family: string;
-        size: number;
-    }
-    enum Palette {
-        Primary = 0,
-        Secondary = 1,
-        Tertiary = 2,
-        Quaternary = 3
-    }
-    enum Size {
-        Small = 0,
-        Medium = 1,
-        Large = 2
-    }
+    const Default: Context;
 }
